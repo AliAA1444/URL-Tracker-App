@@ -1,13 +1,13 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib  # ضروري لتحميل الموديل
-import tldextract # ضروري لاستخراج أجزاء الرابط بدقة
-import re
+import joblib
+import tldextract
+from urllib.parse import urlparse
 import math
 import time
 
-# 1. Page Configuration | إعدادات الصفحة
+# 1. إعدادات الصفحة (نفس V2.0)
 st.set_page_config(
     page_title="URL TRACKER V3.0",
     page_icon="🛡️",
@@ -19,7 +19,7 @@ st.set_page_config(
 if 'language' not in st.session_state:
     st.session_state['language'] = None
 
-# 2. Localization Dictionary | قاموس الترجمة (تم إضافة نصوص المنطقة البرتقالية)
+# 2. قاموس الترجمة الكامل (استعادة نصوصك السابقة + إضافات V3.0)
 T = {
     'en': {
         'sidebar_role': 'Cybersecurity & AI Researcher',
@@ -27,21 +27,23 @@ T = {
         'sidebar_major': 'Computer Science',
         'status_online': 'System Online',
         'main_title': '🛡️ URL TRACKER V3.0 | AI Phishing Detector',
-        'main_subtitle': 'Enterprise-Grade Analysis Powered by 651k Real Samples',
+        'main_subtitle': 'Professional Analysis Powered by 651k Real Samples',
         'input_label': 'URL',
-        'input_placeholder': 'Enter URL here (e.g., https://stc.com.sa)',
+        'input_placeholder': 'Enter URL (e.g., https://stc.com.sa)',
         'btn_scan': 'SCAN NOW 🚀',
         'history_title': '🕒 Recent Scans',
         'safe_title': '✅ SAFE WEBSITE',
         'caution_title': '⚠️ CAUTION ZONE',
         'phish_title': '🚨 PHISHING DETECTED',
-        'caution_desc': 'System detected mixed signals. Proceed with caution.',
+        'safe_desc': 'System did not detect any potential threats.',
+        'caution_desc': 'Mixed signals detected. Proceed with caution.',
+        'phish_desc': 'Malicious behavior patterns detected.',
         'risk_label': '⚠️ Risk Level:',
         'tech_details': '🔍 Technical Analysis',
         'step1': '🔌 Loading AI Model...',
-        'step2': '🧠 Extracting Features...',
+        'step2': '🧠 Analyzing Patterns...',
         'step3': '🤖 AI Probability Check...',
-        'step4': '✅ Analysis Complete.',
+        'step4': '✅ Done.',
         'col_status': 'Status', 'col_engine': 'Engine', 'col_time': 'Time',
     },
     'ar': {
@@ -58,18 +60,20 @@ T = {
         'safe_title': '✅ موقع آمن',
         'caution_title': '⚠️ منطقة شك',
         'phish_title': '🚨 موقع خبيث / احتيال',
+        'safe_desc': 'لم يكتشف النظام أي تهديدات محتملة.',
         'caution_desc': 'اكتشف النظام إشارات مختلطة. يرجى التحقق من المصدر.',
+        'phish_desc': 'اكتشف النظام أنماطاً سلوكية خبيثة في هذا الرابط.',
         'risk_label': '⚠️ مستوى الخطورة:',
         'tech_details': '🔍 التحليل التقني',
-        'step1': '🔌 جاري تحميل موديل الذكاء الاصطناعي...',
-        'step2': '🧠 استخراج الميزات الهيكلية...',
+        'step1': '🔌 تحميل موديل الذكاء الاصطناعي...',
+        'step2': '🧠 تحليل الميزات الهيكلية...',
         'step3': '🤖 فحص الاحتمالات...',
         'step4': '✅ تم التحليل.',
         'col_status': 'الحالة', 'col_engine': 'المحرك', 'col_time': 'الوقت',
     }
 }
 
-# 3. Language Selection | اختيار اللغة
+# 3. شاشة اختيار اللغة
 if st.session_state['language'] is None:
     st.markdown("<h1 style='text-align: center;'>🛡️ URL TRACKER</h1>", unsafe_allow_html=True)
     st.write("")
@@ -86,19 +90,29 @@ if st.session_state['language'] is None:
 L = T[st.session_state['language']]
 is_rtl = True if st.session_state['language'] == 'ar' else False
 
-# 4. Custom CSS
+# 4. تخصيص المظهر (استعادة CSS الجميل)
 st.markdown(f"""
     <style>
     .main {{ background-color: #f8f9fa; direction: {'rtl' if is_rtl else 'ltr'}; }}
+    .safe-box {{
+        background-color: #d1e7dd; color: #0f5132; padding: 20px;
+        border-radius: 10px; border-left: 10px solid #198754; margin-bottom: 20px;
+        text-align: {'right' if is_rtl else 'left'};
+    }}
     .caution-box {{
         background-color: #fff3cd; color: #856404; padding: 20px;
         border-radius: 10px; border-left: 10px solid #ffc107; margin-bottom: 20px;
         text-align: {'right' if is_rtl else 'left'};
     }}
+    .danger-box {{
+        background-color: #f8d7da; color: #842029; padding: 20px;
+        border-radius: 10px; border-left: 10px solid #dc3545; margin-bottom: 20px;
+        text-align: {'right' if is_rtl else 'left'};
+    }}
     </style>
     """, unsafe_allow_html=True)
 
-# 5. Sidebar
+# 5. القائمة الجانبية (استعادة ملفك الشخصي)
 with st.sidebar:
     st.image("my_photo.png", width=100)
     st.markdown(f"### 👨‍💻 **Ali Alkhamees**")
@@ -106,10 +120,9 @@ with st.sidebar:
     st.markdown("---")
     st.success(f"● {L['status_online']}")
 
-# 6. Backend - Loading Model & Feature Extraction
+# 6. البرمجة الخلفية (Backend)
 @st.cache_resource
 def load_v3_model():
-    # تحميل الموديل الذي رفعته على GitHub
     return joblib.load('url_tracker_v3_model.pkl')
 
 model = load_v3_model()
@@ -121,7 +134,7 @@ def extract_features_v3(url):
         suffix = ext.suffix.lower()
         subdomain = ext.subdomain.lower()
         
-        # 1. وزن النطاق (TLD Weight) - ضروري جداً لمصداقية النطاقات السعودية
+        # 1. وزن النطاق (TLD Weight) - ضروري جداً
         tld_weight = 1
         if suffix in ['gov.sa', 'edu.sa', 'mil.sa', 'gov', 'edu']: tld_weight = 5
         elif suffix in ['com.sa', 'sa', 'org.sa']: tld_weight = 3
@@ -141,11 +154,12 @@ def extract_features_v3(url):
         
         entropy = calc_entropy(domain)
 
-        # يجب أن يكون الترتيب والعدد مطابقاً لملف الـ pkl
+        # هام جداً: الترتيب والعدد يجب أن يكون 4 ميزات كما تدرب الموديل
         return [url_len, tld_weight, is_root, entropy]
     except:
         return [0, 1, 1, 0]
-# 7. Main UI
+
+# 7. واجهة التطبيق الرئيسية
 st.title(L['main_title'])
 st.markdown(f"### {L['main_subtitle']}")
 
@@ -162,26 +176,22 @@ if scan_btn and url_input:
         st.write(L['step2']); time.sleep(0.2)
         st.write(L['step3'])
         
-        # الحصول على النتيجة من الموديل
+        # استخراج الميزات (4 ميزات)
         features = extract_features_v3(url_input)
-        prob = model.predict_proba([features])[0][1] # نسبة الخطر
+        # الفحص عبر الموديل
+        prob = model.predict_proba([features])[0][1]
         status.update(label=L['step4'], state="complete")
 
     st.markdown("### 📊 Report")
     
-    # منطق المناطق الثلاث
+    # نظام المناطق الثلاث (Thresholding)
     if prob < 0.35:
-        # آمن (المنطقة الخضراء)
-        st.markdown(f'<div class="safe-box"><h2>{L["safe_title"]}</h2><p>{(1-prob)*100:.1f}% Confidence</p></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="safe-box"><h2>{L["safe_title"]}</h2><p>{L["safe_desc"]}</p><p>Confidence: {(1-prob)*100:.1f}%</p></div>', unsafe_allow_html=True)
     elif prob < 0.75:
-        # شك (المنطقة البرتقالية - حل مشكلة STC)
         st.markdown(f'<div class="caution-box"><h2>{L["caution_title"]}</h2><p>{L["caution_desc"]}</p></div>', unsafe_allow_html=True)
-        st.info("Risk Score: {:.1f}%".format(prob*100))
+        st.info(f"{L['risk_label']} {prob*100:.1f}%")
     else:
-        # خطر (المنطقة الحمراء)
-        st.markdown(f'<div class="danger-box"><h2>{L["phish_title"]}</h2><p>Threat Level: {prob*100:.1f}%</p></div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="danger-box"><h2>{L["phish_title"]}</h2><p>{L["phish_desc"]}</p><p>Threat Level: {prob*100:.1f}%</p></div>', unsafe_allow_html=True)
 
-# سجل الفحص البسيط
+# سجل الفحص (اختياري)
 if 'history' not in st.session_state: st.session_state['history'] = []
-# (يمكنك إضافة منطق حفظ السجل هنا كما في كودك السابق)
-
