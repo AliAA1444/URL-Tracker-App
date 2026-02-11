@@ -4,3 +4,9 @@ numpy
 scikit-learn
 joblib
 tldextract
+plotly
+fuzzywuzzy
+python-Levenshtein
+tldextract
+joblib
+
