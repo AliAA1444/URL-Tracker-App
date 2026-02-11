@@ -134,17 +134,14 @@ def extract_features_v3(url):
         suffix = ext.suffix.lower()
         subdomain = ext.subdomain.lower()
         
-        # 1. وزن النطاق (TLD Weight) - ضروري جداً
-        tld_weight = 1
-        if suffix in ['gov.sa', 'edu.sa', 'mil.sa', 'gov', 'edu']: tld_weight = 5
-        elif suffix in ['com.sa', 'sa', 'org.sa']: tld_weight = 3
-        elif suffix in ['tk', 'ml', 'ga', 'cf', 'xyz', 'top']: tld_weight = 0
-        
-        # 2. طول الرابط
+        # 1. طول الرابط
         url_len = len(str(url))
         
-        # 3. هل هو رابط أساسي (Root)؟
-        is_root = 1 if subdomain in ['', 'www'] else 0
+        # 2. طول الدومين
+        dom_len = len(domain)
+        
+        # 3. ميزة النطاقات السعودية (is_saudi) - تأكد أنها كانت موجودة في كولاب
+        is_saudi = 1 if suffix in ['sa', 'com.sa', 'gov.sa', 'edu.sa'] else 0
         
         # 4. العشوائية (Entropy)
         def calc_entropy(text):
@@ -153,11 +150,15 @@ def extract_features_v3(url):
             return -sum(p * math.log(p, 2) for p in probs)
         
         entropy = calc_entropy(domain)
+        
+        # 5. كلمات مريبة (has_sus_word)
+        sus_words = ['login', 'verify', 'update', 'secure', 'account', 'banking']
+        has_sus_word = 1 if any(word in subdomain.lower() for word in sus_words) else 0
 
-        # هام جداً: الترتيب والعدد يجب أن يكون 4 ميزات كما تدرب الموديل
-        return [url_len, tld_weight, is_root, entropy]
+        # المجموع هنا = 5 ميزات
+        return [url_len, dom_len, is_saudi, entropy, has_sus_word]
     except:
-        return [0, 1, 1, 0]
+        return [0, 0, 0, 0, 0]
 
 # 7. واجهة التطبيق الرئيسية
 st.title(L['main_title'])
@@ -198,5 +199,6 @@ if scan_btn and url_input:
 
 # سجل الفحص (اختياري)
 if 'history' not in st.session_state: st.session_state['history'] = []
+
 
 
