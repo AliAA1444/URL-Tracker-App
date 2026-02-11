@@ -121,29 +121,30 @@ def extract_features_v3(url):
         suffix = ext.suffix.lower()
         subdomain = ext.subdomain.lower()
         
-        # ميزات الهوية (نفس التي استخدمناها في Colab)
+        # 1. وزن النطاق (TLD Weight) - ضروري جداً لمصداقية النطاقات السعودية
         tld_weight = 1
         if suffix in ['gov.sa', 'edu.sa', 'mil.sa', 'gov', 'edu']: tld_weight = 5
         elif suffix in ['com.sa', 'sa', 'org.sa']: tld_weight = 3
         elif suffix in ['tk', 'ml', 'ga', 'cf', 'xyz', 'top']: tld_weight = 0
         
+        # 2. طول الرابط
         url_len = len(str(url))
+        
+        # 3. هل هو رابط أساسي (Root)؟
         is_root = 1 if subdomain in ['', 'www'] else 0
         
+        # 4. العشوائية (Entropy)
         def calc_entropy(text):
             if not text: return 0
             probs = [float(text.count(c)) / len(text) for c in set(text)]
             return -sum(p * math.log(p, 2) for p in probs)
         
         entropy = calc_entropy(domain)
-        
-        sus_words = ['login', 'verify', 'update', 'secure', 'account', 'banking']
-        has_sus_word = 1 if any(word in subdomain.lower() for word in sus_words) else 0
 
-        return [url_len, len(domain), is_root, entropy, has_sus_word]
+        # يجب أن يكون الترتيب والعدد مطابقاً لملف الـ pkl
+        return [url_len, tld_weight, is_root, entropy]
     except:
-        return [0, 0, 1, 0, 0]
-
+        return [0, 1, 1, 0]
 # 7. Main UI
 st.title(L['main_title'])
 st.markdown(f"### {L['main_subtitle']}")
@@ -183,3 +184,4 @@ if scan_btn and url_input:
 # سجل الفحص البسيط
 if 'history' not in st.session_state: st.session_state['history'] = []
 # (يمكنك إضافة منطق حفظ السجل هنا كما في كودك السابق)
+
