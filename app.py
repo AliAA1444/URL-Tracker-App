@@ -23,6 +23,7 @@ if 'language' not in st.session_state: st.session_state['language'] = None
 if 'history' not in st.session_state: st.session_state['history'] = []
 
 # 2. Localization Dictionary | قاموس الترجمة الكامل (V2.0)
+# 2. Localization Dictionary | القاموس الكامل والمصحح
 T = {
     'en': {
         'sidebar_role': 'Cybersecurity & AI Researcher',
@@ -38,6 +39,9 @@ T = {
         'safe_title': '✅ SAFE & TRUSTED',
         'caution_title': '⚠️ CAUTION REQUIRED',
         'phish_title': '🚨 PHISHING DETECTED',
+        'safe_desc': 'System did not detect any potential threats.',
+        'caution_desc': 'Mixed signals detected. Proceed with caution.',
+        'phish_desc': 'Malicious behavior patterns detected.',
         'risk_label': 'Threat Level:',
         'tech_details': '🔍 Forensic Breakdown',
         'xai_title': '📊 Explainable AI (XAI)',
@@ -61,6 +65,9 @@ T = {
         'safe_title': '✅ موقع آمن وموثوق',
         'caution_title': '⚠️ منطقة شك (انتباه)',
         'phish_title': '🚨 تم كشف محاولة تصيد',
+        'safe_desc': 'لم يكتشف النظام أي تهديدات محتملة.',
+        'caution_desc': 'يظهر الرابط إشارات مختلطة. يفضل الحذر والتحقق من المصدر.',
+        'phish_desc': 'تم اكتشاف أنماط برمجية مطابقة لعمليات التصيد.',
         'risk_label': 'مستوى التهديد:',
         'tech_details': '🔍 التحليل الجنائي الرقمي',
         'xai_title': '📊 شرح قرار الذكاء الاصطناعي',
@@ -71,7 +78,6 @@ T = {
         'col_status': 'الحالة', 'col_engine': 'درجة الخطر', 'col_time': 'الوقت'
     }
 }
-
 # 3. Language Selection | شاشة اختيار اللغة (V2.0)
 if st.session_state['language'] is None:
     st.markdown("<h1 style='text-align: center; margin-top: 50px;'>🛡️ URL TRACKER V3.2</h1>", unsafe_allow_html=True)
@@ -233,3 +239,4 @@ if st.session_state['history']:
 
 # 10. Footer | التذييل
 st.markdown("<div style='text-align: center; color: gray; margin-top: 50px;'>© 2025 URL TRACKER Enterprise V3.2 by Ali Alkhamees</div>", unsafe_allow_html=True)
+
