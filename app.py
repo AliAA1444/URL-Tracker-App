@@ -178,7 +178,9 @@ if scan_btn and url_input:
         
         # استخراج الميزات (4 ميزات)
         features = extract_features_v3(url_input)
-        # الفحص عبر الموديل
+       # الفحص عبر الموديل
+       st.write(f"Model expects: {model.n_features_in_} features")
+st.write(f"You provided: {len(features)} features")
         prob = model.predict_proba([features])[0][1]
         status.update(label=L['step4'], state="complete")
 
@@ -195,3 +197,4 @@ if scan_btn and url_input:
 
 # سجل الفحص (اختياري)
 if 'history' not in st.session_state: st.session_state['history'] = []
+
