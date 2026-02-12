@@ -249,8 +249,7 @@ top_targets = [
     # المتاجر والتجارة الإلكترونية
     'noon', 'jarir', 'extra', 'namshi', 'haraj', 'shein', 'aliexpress', 'temu', 'iherb', 'niceone', 'nahdi', 'aldawaa',
     # تطبيقات التوصيل والخدمات المحلية
-    'hungerstation', 'jahez', 'panda', 'othaim'
-]
+    'hungerstation', 'jahez', 'panda', 'othaim']
     is_typosquatting = 0
     for part in domain_parts:
         if len(part) < 4: continue 
@@ -435,6 +434,7 @@ with st.expander(L['disclaimer_title']):
     st.markdown(L['disclaimer_text'])
 
 st.markdown("<div style='text-align: center; color: gray;'>© 2025 URL TRACKER by Ali Alkhamees (V2.0 - Beta)</div>", unsafe_allow_html=True)
+
 
 
 
