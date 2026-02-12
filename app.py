@@ -235,7 +235,13 @@ def get_features(url):
 
     # 5. Advanced Typosquatting Detection Logic
     # Checking against top targeted brands worldwide
-    top_targets = ['google', 'facebook', 'amazon', 'apple', 'microsoft', 'netflix', 'paypal', 'absher', 'moi', 'stc', 'jarir', 'github', 'coursera']
+    # قائمة الأهداف المحدثة لتشمل السوق السعودي بتركيز عالي
+top_targets = [
+    'google', 'facebook', 'amazon', 'apple', 'microsoft', 'netflix', 'paypal', 'github', # عالمي
+    'absher', 'moi', 'mof', 'moe', 'moh', 'nafath', 'tawakkalna', 'zatca', 'spl',         # حكومي
+    'alrajhi', 'alahli', 'snb', 'alinma', 'riyadbank', 'sab', 'anb', 'stcpay', 'urpay',   # بنكي
+    'stc', 'mobily', 'zain', 'noon', 'jarir', 'extra', 'aramex', 'smsa'                  # خدمات وتجارة
+]
     is_typosquatting = 0
     for part in domain_parts:
         if len(part) < 4: continue 
@@ -420,4 +426,5 @@ with st.expander(L['disclaimer_title']):
     st.markdown(L['disclaimer_text'])
 
 st.markdown("<div style='text-align: center; color: gray;'>© 2025 URL TRACKER by Ali Alkhamees (V2.0 - Beta)</div>", unsafe_allow_html=True)
+
 
