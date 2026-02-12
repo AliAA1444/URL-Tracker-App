@@ -1,24 +1,26 @@
-# 🛡️ URL TRACKER (Live App)
+🛡️ URL TRACKER (Enterprise Beta V2.0)
+🚀 Live Demo | تجربة الموقع
+Click here to try the App
 
-### 🚀 Live Demo | تجربة الموقع
-**[Click here to try the App](https://ali-url-tracker.streamlit.app/)**
+📌 Overview
+This is the production repository for URL TRACKER, an advanced Hybrid AI-Powered Phishing Detection System. This version is specifically calibrated for the Saudi Arabian market, utilizing a robust Machine Learning model trained on 20,000 balanced samples to identify sophisticated local and global phishing threats.
 
----
+🌟 Key Features
+Massive Synthetic Dataset: Trained on a balanced dataset of 20,000 samples (10k safe vs. 10k malicious) to ensure high stability and reliable risk scoring.
 
-## 📌 Overview
-This is the production repository for **URL TRACKER**, a Hybrid AI-Powered Phishing Detection System. It combines **White-listing logic** with **Machine Learning (Random Forest)** to detect zero-day phishing attacks with high accuracy.
+Saudi Intelligence Layer: Enhanced typosquatting detection for over 60+ major Saudi brands, including local banks (Alinma, AlRajhi, SNB), government portals (Absher, Nafath), and logistics companies (Aramex, SMSA).
 
-## 🌟 Key Features
-- **Hybrid Engine:** Checks trusted domains first, then analyzes suspicious ones using AI.
-- **Deep Parsing:** Detects sub-domain attacks (e.g., `ww38.gilhub.com`).
-- **Typosquatting Detection:** Identifies impersonation attempts using Levenshtein Distance logic.
-- **Zero-Shot Detection:** Successfully identifies legitimate governmental/educational domains without prior training.
+Fuzzy Matching Logic: Employs advanced SequenceMatcher to detect subtle impersonation attempts and brand abuse with high confidence thresholds.
 
-## 🛠️ Tech Stack
-- **Language:** Python
-- **Framework:** Streamlit
-- **ML Library:** Scikit-Learn
-- **Deployment:** Streamlit Cloud
+Multi-Layered Defense: Integrates a trusted whitelist for global tech giants with heuristic-based rules and AI pattern recognition.
 
----
-*Developed by **Ali Alkhamees** - Computer Science Student at Majmaah University.*
+🛠️ Tech Stack
+Language: Python
+
+Framework: Streamlit
+
+AI Model: Random Forest Classifier (Scikit-Learn)
+
+Data Logic: Fuzzy Logic & Shannon Entropy for randomness detection.
+
+Developed by Ali Alkhamees - Computer Science Student (Artificial Intelligence) at Majmaah University.
