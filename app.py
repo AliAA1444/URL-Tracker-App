@@ -268,13 +268,13 @@ def train_model_logic():
     brands = ['google', 'amazon', 'github', 'jarir', 'absher']
     
     #Generating 2500 Safe URLs
-    for i in range(2500):
+    for i in range(10000):
         dom = random.choice(brands)
         safe_urls.append(f"https://www.{dom}.com")
         safe_urls.append(f"https://www.{dom}.com/product/{random.randint(1000,9999)}")
     
     #Generating 2500 Phishing URLs (Simulation of attacks)
-    for i in range(2500):
+    for i in range(10000):
         dom = random.choice(brands)
         #Simulate Typosquatting (e.g., g00gle)
         fake = list(dom)
@@ -420,3 +420,4 @@ with st.expander(L['disclaimer_title']):
     st.markdown(L['disclaimer_text'])
 
 st.markdown("<div style='text-align: center; color: gray;'>© 2025 URL TRACKER by Ali Alkhamees (V2.0 - Beta)</div>", unsafe_allow_html=True)
+
