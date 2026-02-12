@@ -202,6 +202,7 @@ def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
 # Feature Extraction Function | دالة استخراج الميزات
+# Feature Extraction Function | دالة استخراج الميزات
 def get_features(url):
     my_list = []
     try:
@@ -234,22 +235,15 @@ def get_features(url):
     my_list.append(found_bad)
 
     # 5. Advanced Typosquatting Detection Logic
-    # Checking against top targeted brands worldwide
-    # قائمة الأهداف المحدثة لتشمل السوق السعودي بتركيز عالي
-# قائمة الأهداف الموسعة والموثوقة (إصدار 2026)
-top_targets = [
-    # عمالقة التقنية (عالمي)
-    'google', 'facebook', 'amazon', 'apple', 'microsoft', 'netflix', 'paypal', 'github', 'linkedin', 'whatsapp', 'ebay', 'booking', 'adobe', 
-    # الخدمات الحكومية السعودية
-    'absher', 'moi', 'mof', 'moe', 'moh', 'nafath', 'tawakkalna', 'zatca', 'spl', 'najm', 'qiwa', 'balady',
-    # البنوك والمحافظ الرقمية السعودية
-    'alrajhi', 'alahli', 'snb', 'alinma', 'riyadbank', 'sab', 'anb', 'stcpay', 'urpay', 'alinmapay',
-    # شركات الشحن والخدمات اللوجستية
-    'aramex', 'smsa', 'dhl', 'fedex', 'ups', 'naqel', 'zajil', 'aymakan', 'alma',
-    # المتاجر والتجارة الإلكترونية
-    'noon', 'jarir', 'extra', 'namshi', 'haraj', 'shein', 'aliexpress', 'temu', 'iherb', 'niceone', 'nahdi', 'aldawaa',
-    # تطبيقات التوصيل والخدمات المحلية
-    'hungerstation', 'jahez', 'panda', 'othaim']
+    # قائمة الأهداف المحدثة لتشمل السوق السعودي بتركيز عالي (إصدار 2026)
+    top_targets = [
+        'google', 'facebook', 'amazon', 'apple', 'microsoft', 'netflix', 'paypal', 'github', 'linkedin', 'whatsapp', 'ebay', 'booking', 'adobe', 
+        'absher', 'moi', 'mof', 'moe', 'moh', 'nafath', 'tawakkalna', 'zatca', 'spl', 'najm', 'qiwa', 'balady',
+        'alrajhi', 'alahli', 'snb', 'alinma', 'riyadbank', 'sab', 'anb', 'stcpay', 'urpay', 'alinmapay',
+        'aramex', 'smsa', 'dhl', 'fedex', 'ups', 'naqel', 'zajil', 'aymakan', 'alma',
+        'noon', 'jarir', 'extra', 'namshi', 'haraj', 'shein', 'aliexpress', 'temu', 'iherb', 'niceone', 'nahdi', 'aldawaa',
+        'hungerstation', 'jahez', 'panda', 'othaim'
+    ]
 
     is_typosquatting = 0
     for part in domain_parts:
@@ -435,6 +429,7 @@ with st.expander(L['disclaimer_title']):
     st.markdown(L['disclaimer_text'])
 
 st.markdown("<div style='text-align: center; color: gray;'>© 2025 URL TRACKER by Ali Alkhamees (V2.0 - Beta)</div>", unsafe_allow_html=True)
+
 
 
 
